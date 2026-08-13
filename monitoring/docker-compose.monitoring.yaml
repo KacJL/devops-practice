@@ -1,0 +1,50 @@
+services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring-net
+    volumes:
+      - ./prometheus/promethus.yml:/etc/prometheus/prometheus.yml:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 256M
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring-net
+    volumes:
+      - ./grafana/data/:/var/lib/grafana
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1024M
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - "9100:9100"
+    networks:
+      - monitoring-net
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/host/root:ro
+    pid: host
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --path.rootfs=/host/rootfs
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
+#volumes:
+#configs:
+#secrets:

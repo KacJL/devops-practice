@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>DevOps Dashboard</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #2c3e50; color: white; margin: 0; }
+        .card { background: #34495e; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; width: 350px; }
+        h1 { color: #3498db; margin-bottom: 0.5rem; }
+        .status { font-size: 0.9rem; color: #95a5a6; margin-bottom: 2rem; }
+        .counter-box { font-size: 3rem; font-weight: bold; color: #2ecc71; margin: 1rem 0; }
+        .footer { font-size: 0.8rem; opacity: 0.6; margin-top: 2rem; }
+        .online { color: #2ecc71; }
+        .offline { color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>DevOps Practice</h1>
+        <div id="status" class="status">Проверка связи...</div>
+        
+        <div class="counter-box" id="counter">0</div>
+        <p>визитов зафиксировано</p>
+
+        <div class="footer">
+            Backend: <span id="backend-status">...</span><br>
+            Контейнер: Nginx (Frontend)
+        </div>
+    </div>
+
+    <script>
+        async function updateStats() {
+            const counterEl = document.getElementById('counter');
+            const statusEl = document.getElementById('status');
+            const backendStatus = document.getElementById('backend-status');
+
+            try {
+                const response = await fetch('/api');
+                if (!response.ok) throw new Error('Ошибка сервера');
+                
+                const data = await response.text();
+                
+                // Вытаскиваем только число из строки бэкенда, если он шлет текст
+                const count = data.replace(/\D/g, ""); 
+                
+                counterEl.innerText = count || data;
+                statusEl.innerHTML = "Система <span class='online'>в сети</span>";
+                backendStatus.innerText = "Connected";
+                backendStatus.className = "online";
+            } catch (error) {
+                statusEl.innerHTML = "Система <span class='offline'>недоступна</span>";
+                backendStatus.innerText = "Disconnected";
+                backendStatus.className = "offline";
+                console.error(error);
+            }
+        }
+
+        updateStats();
+        // Обновляем данные каждые 5 секунд для эффекта "мониторинга"
+        setInterval(updateStats, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+services:
+  frontend:
+    build: .
+    ports:
+      - "80:80" # без прокидывания портов, контейнеры будут изолированные
+    networks:
+      - frontend-net
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 256M
+#volumes:
+#configs:
+#secrets:

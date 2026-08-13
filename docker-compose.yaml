@@ -1,0 +1,14 @@
+include:
+  - ./backend/docker-compose.backend.yaml
+  - ./frontend/docker-compose.frontend.yaml
+  - ./monitoring/docker-compose.monitoring.yaml
+networks:
+  frontend-net:
+    driver: bridge
+  backend-net:
+    driver: bridge
+  monitoring-net:
+    driver: bridge
+#volumes:
+#configs:
+#secrets:

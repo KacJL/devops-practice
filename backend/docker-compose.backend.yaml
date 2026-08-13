@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: .
+    ports:
+      - "5000:5000" # Для дебагинга 
+    depends_on:
+      - db
+    networks:
+      - frontend-net
+      - backend-net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+  db:
+    image: redis:alpine
+    networks:
+      - backend-net
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1024M
+#volumes:
+#configs:
+#secrets:
