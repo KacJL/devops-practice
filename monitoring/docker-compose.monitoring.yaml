@@ -20,6 +20,8 @@ services:
       - monitoring-net
     volumes:
       - ./grafana/data/:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     deploy:
       resources:
         limits:
@@ -45,6 +47,19 @@ services:
         limits:
           cpus: '0.25'
           memory: 128M
-#volumes:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      - monitoring-net
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /dev/disk:/dev/disk:ro
 #configs:
 #secrets:
