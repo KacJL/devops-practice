@@ -12,10 +12,19 @@ services:
         limits:
           cpus: '1'
           memory: 256M
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:9090/-/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
   grafana:
     image: grafana/grafana
     ports:
       - "3000:3000"
+    depends_on:
+      prometheus:
+        condition: service_healthy
     networks:
       - monitoring-net
     volumes:
@@ -27,6 +36,12 @@ services:
         limits:
           cpus: '1.5'
           memory: 1024M
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
   node-exporter:
     image: prom/node-exporter
     ports:
