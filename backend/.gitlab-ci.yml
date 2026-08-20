@@ -16,7 +16,7 @@ build-backend:
     - docker
   script:
     - docker version
-    - docker build -t my-app .
+    - docker build -t my-app ./backend
 
 test-backend-flake8:
   stage: test
