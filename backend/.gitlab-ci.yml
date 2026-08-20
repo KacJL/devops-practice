@@ -20,10 +20,12 @@ build-backend:
 
 test-backend-flake8:
   stage: test
+  image: python:3.12
   tags:
     - docker
   script:
-    - flake8 .
+    - pip install flake8
+    - flake8 backend/
   needs:
     - build-backend
 
