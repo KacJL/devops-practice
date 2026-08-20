@@ -6,6 +6,12 @@ stages:
 build-backend:
   stage: build
   image: docker:cli
+  services:
+    - name: docker:dind
+      alias: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
   tags:
     - docker
   script:
