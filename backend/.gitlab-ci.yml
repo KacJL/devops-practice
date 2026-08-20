@@ -5,7 +5,7 @@ stages:
 
 build-backend:
   stage: build
-  image: docker-cli
+  image: docker:cli
   tags:
     - docker
   script:
