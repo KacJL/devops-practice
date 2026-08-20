@@ -5,8 +5,9 @@ import os
 app = Flask(__name__)
 
 # Используем переменные окружения для гибкости (DevOps style)
-REDIS_HOST = os.getenv("REDIS_HOST", "db") 
+REDIS_HOST = os.getenv("REDIS_HOST", "db")
 redis = Redis(host=REDIS_HOST, port=6379, decode_responses=True)
+
 
 @app.route('/api')
 def hello():
@@ -15,6 +16,7 @@ def hello():
         return f'Привет! Этот сайт открывали {count} раз.'
     except Exception as e:
         return f"Ошибка БД: {str(e)}", 500
+
 
 if __name__ == "__main__":
     # debug=True полезен при разработке
