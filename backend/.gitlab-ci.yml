@@ -1,0 +1,29 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build-backend:
+  stage: build
+  tags:
+    - docker
+  script:
+    - docker build -t my-app .
+
+test-backend-flake8:
+  stage: test
+  tags:
+    - docker
+  script:
+    - flake8 .
+  needs:
+    - build-backend
+
+deploy-backend:
+  stage: deploy  
+  tags:
+    - docker
+  script:
+    - echo "Deploy"
+  needs:
+    - job: test-backend-flake8
