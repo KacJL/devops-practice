@@ -5,9 +5,11 @@ stages:
 
 build-backend:
   stage: build
+  image: docker-cli
   tags:
     - docker
   script:
+    - docker version
     - docker build -t my-app .
 
 test-backend-flake8:
